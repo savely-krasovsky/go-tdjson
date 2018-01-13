@@ -65,7 +65,8 @@ func (c *Client) Destroy() {
 	C.td_json_client_destroy(c.Client)
 }
 
-// Sends request to the TDLib client. May be called from any thread.
+// Sends request to the TDLib client.
+// You can provide string or Update.
 func (c *Client) Send(jsonQuery interface{}) {
 	var query *C.char
 
@@ -82,7 +83,7 @@ func (c *Client) Send(jsonQuery interface{}) {
 }
 
 // Receives incoming updates and request responses from the TDLib client.
-// May be called from any thread, but shouldn't be called simultaneously from two different threads.
+// You can provide string or Update.
 func (c *Client) Receive(timeout float64) Update {
 	result := C.td_json_client_receive(c.Client, C.double(timeout))
 
@@ -92,7 +93,7 @@ func (c *Client) Receive(timeout float64) Update {
 }
 
 // Synchronously executes TDLib request.
-// May be called from any thread. Only a few requests can be executed synchronously.
+// Only a few requests can be executed synchronously.
 func (c *Client) Execute(jsonQuery interface{}) Update {
 	var query *C.char
 
@@ -129,6 +130,7 @@ func SetLogVerbosityLevel(level int) {
 }
 
 // Sends request to the TDLib client and catches the result in updates channel.
+// You can provide string or Update.
 func (c *Client) SendAndCatch(jsonQuery interface{}) (Update, error) {
 	var update Update
 
@@ -171,7 +173,7 @@ func (c *Client) SendAndCatch(jsonQuery interface{}) (Update, error) {
 	}
 }
 
-// Method for interactive authorizations proccess, just provide it authorization state from updates and api credentials.
+// Method for interactive authorizations process, just provide it authorization state from updates and api credentials.
 func (c *Client) Auth(authorizationState string, apiId string, apiHash string) (Update, error) {
 	switch authorizationState {
 	case "authorizationStateWaitTdlibParameters":
