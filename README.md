@@ -18,7 +18,6 @@ It also has two interesting methods:
 package main
 
 import (
-	"fmt"
 	"github.com/L11R/go-tdjson"
 	"log"
 	"os"
@@ -52,9 +51,10 @@ func main() {
 		os.Exit(1)
 	}()
 
+	// Main loop
 	for update := range client.Updates {
-		// Show all updates in JSON
-		fmt.Println(update)
+		// Show all updates
+		log.Println(update)
 
 		// Authorization block
 		if update["@type"].(string) == "updateAuthorizationState" {
