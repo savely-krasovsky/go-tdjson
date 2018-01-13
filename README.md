@@ -19,6 +19,7 @@ package main
 
 import (
 	"github.com/L11R/go-tdjson"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -54,7 +55,7 @@ func main() {
 	// Main loop
 	for update := range client.Updates {
 		// Show all updates
-		log.Println(update)
+		fmt.Println(update)
 
 		// Authorization block
 		if update["@type"].(string) == "updateAuthorizationState" {
