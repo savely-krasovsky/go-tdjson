@@ -28,6 +28,9 @@ type Client struct {
 // Has two public fields:
 // Client itself and Updates channel
 func NewClient() *Client {
+	// Seed rand with time
+	rand.Seed(time.Now().UnixNano())
+
 	client := Client{Client: C.td_json_client_create()}
 	client.Updates = make(chan Update, 100)
 
