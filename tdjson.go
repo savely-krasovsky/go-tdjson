@@ -1,6 +1,9 @@
 package tdjson
 
-//#cgo LDFLAGS: -ltdjson
+//#cgo linux CFLAGS: -I/usr/local/include
+//#cgo windows CFLAGS: -IC:/src/td -IC:/src/td/build
+//#cgo linux LDFLAGS: -ltdjson
+//#cgo windows LDFLAGS: -LC:/src/td/build/Debug -ltdjson
 //#include <stdlib.h>
 //#include <td/telegram/td_json_client.h>
 //#include <td/telegram/td_log.h>
