@@ -14,7 +14,9 @@ It also has two interesting methods:
 - SendAndCatch()
 
 # Linking statically against TDLib
-I recommend you to link it statically if you don't want compile TDLib on production (don't forget that it requires at least 8GB of RAM). To do that, just replace `//#cgo linux LDFLAGS: -L/usr/local/lib -ltdjson` with `//#cgo linux LDFLAGS: -L/usr/local/lib -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm`. For more details read this issue: https://github.com/tdlib/td/issues/8
+I recommend you to link it statically if you don't want compile TDLib on production (don't forget that it requires at least 8GB of RAM). 
+<br/>To do that, just build your source with tag `tdjson_static`: `go build -tags tdjson_static`
+<br />For more details read this issue: https://github.com/tdlib/td/issues/8
 
 # Example
 ```golang
