@@ -25,20 +25,30 @@ import (
 type Update = map[string]interface{}
 
 type Client struct {
-	Client  unsafe.Pointer
-	Updates chan Update
-	waiters sync.Map
+	Client     unsafe.Pointer
+	Updates    chan Update
+	waiters    sync.Map
+	parameters *options
 }
 
 // Creates a new instance of TDLib.
 // Has two public fields:
 // Client itself and Updates channel
-func NewClient() *Client {
+func NewClient(params ...Option) *Client {
 	// Seed rand with time
 	rand.Seed(time.Now().UnixNano())
 
 	client := Client{Client: C.td_json_client_create()}
 	client.Updates = make(chan Update, 100)
+	client.parameters = &options{
+		systemLanguageCode: "en",
+		systemVersion:      "Unknown",
+		applicationVersion: "1.0",
+	}
+
+	for _, option := range params {
+		option(client.parameters)
+	}
 
 	go func() {
 		for {
@@ -183,22 +193,12 @@ func (c *Client) SendAndCatch(jsonQuery interface{}) (Update, error) {
 }
 
 // Method for interactive authorizations process, just provide it authorization state from updates and api credentials.
-func (c *Client) Auth(authorizationState string, apiId string, apiHash string) (Update, error) {
+func (c *Client) Auth(authorizationState string) (Update, error) {
 	switch authorizationState {
 	case "authorizationStateWaitTdlibParameters":
 		res, err := c.SendAndCatch(Update{
-			"@type": "setTdlibParameters",
-			"parameters": Update{
-				"@type":                    "tdlibParameters",
-				"use_message_database":     true,
-				"api_id":                   apiId,
-				"api_hash":                 apiHash,
-				"system_language_code":     "en",
-				"device_model":             "Server",
-				"system_version":           "Unknown",
-				"application_version":      "1.0",
-				"enable_storage_optimizer": true,
-			},
+			"@type":      "setTdlibParameters",
+			"parameters": c.parameters.toTdlibParameters(),
 		})
 		if err != nil {
 			return nil, err
