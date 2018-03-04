@@ -213,9 +213,14 @@ func (c *Client) Auth(authorizationState string) (Update, error) {
 		}
 		return res, nil
 	case "authorizationStateWaitPhoneNumber":
-		fmt.Print("Enter phone: ")
 		var number string
-		fmt.Scanln(&number)
+		if c.parameters.phone == "" {
+			fmt.Print("Enter phone: ")
+			fmt.Scanln(&number)
+			c.parameters.phone = number
+		} else {
+			number = c.parameters.phone
+		}
 
 		res, err := c.SendAndCatch(Update{
 			"@type":        "setAuthenticationPhoneNumber",
@@ -226,6 +231,7 @@ func (c *Client) Auth(authorizationState string) (Update, error) {
 		}
 		return res, nil
 	case "authorizationStateWaitCode":
+		fmt.Println("Phone number: ", c.parameters.phone)
 		fmt.Print("Enter code: ")
 		var code string
 		fmt.Scanln(&code)

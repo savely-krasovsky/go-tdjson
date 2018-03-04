@@ -105,6 +105,13 @@ func WithIgnoreFileNames() Option {
 	}
 }
 
+// Sets phone number for authorization
+func WithPhone(phone string) Option {
+	return func(options *options) {
+		options.phone = phone
+	}
+}
+
 // Changes parameters which will be used during execution Auth method with state authorizationStateWaitTdlibParameters.
 type Option func(*options)
 
@@ -124,6 +131,7 @@ type options struct {
 	applicationVersion     string
 	enableStorageOptimizer bool
 	ignoreFileNames        bool
+	phone                  string
 }
 
 func (o options) toTdlibParameters() Update {
