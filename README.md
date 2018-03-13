@@ -35,18 +35,26 @@ func main() {
 	tdjson.SetLogVerbosityLevel(1)
 	tdjson.SetFilePath("./errors.txt")
 
+	var params []tdjson.Option = []tdjson.Option{
+		tdjson.WithMessageDatabase(),
+		tdjson.WithStorageOptimizer(),
+	}
+
 	// Get API_ID and API_HASH from env vars
 	apiId := os.Getenv("API_ID")
 	if apiId == "" {
 		log.Fatal("API_ID env variable not specified")
 	}
+	params = append(params, tdjson.WithID(apiId))
+
 	apiHash := os.Getenv("API_HASH")
 	if apiHash == "" {
 		log.Fatal("API_HASH env variable not specified")
 	}
+	params = append(params, tdjson.WithHash(apiHash))
 
 	// Create new instance of client
-	client := tdjson.NewClient()
+	client := tdjson.NewClient(params...)
 
 	// Handle Ctrl+C
 	ch := make(chan os.Signal, 2)
@@ -65,7 +73,7 @@ func main() {
 		// Authorization block
 		if update["@type"].(string) == "updateAuthorizationState" {
 			if authorizationState, ok := update["authorization_state"].(tdjson.Update)["@type"].(string); ok {
-				res, err := client.Auth(authorizationState, apiId, apiHash)
+				res, err := client.Auth(authorizationState)
 				if err != nil {
 					log.Println(err)
 				}
@@ -74,5 +82,4 @@ func main() {
 		}
 	}
 }
-
 ```
