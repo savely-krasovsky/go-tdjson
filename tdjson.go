@@ -44,6 +44,7 @@ func NewClient(params ...Option) *Client {
 		systemLanguageCode: "en",
 		systemVersion:      "Unknown",
 		applicationVersion: "1.0",
+		deviceModel:        "Unknown",
 	}
 
 	for _, option := range params {
