@@ -103,7 +103,6 @@ func (c *Client) Send(jsonQuery interface{}) {
 }
 
 // Receives incoming updates and request responses from the TDLib client.
-// You can provide string or Update.
 func (c *Client) Receive(timeout float64) Update {
 	result := C.td_json_client_receive(c.Client, C.double(timeout))
 
