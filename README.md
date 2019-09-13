@@ -1,3 +1,6 @@
+# ⚠️ DEPRECATION NOTICE
+Please, consider this small library as early proof of concept. I wrote it right after TDLib was released. There are more mature libraries currently, I personally can highly recommend [this one](https://github.com/zelenin/go-tdlib) from [@zelenin](https://github.com/zelenin). I use it in my private projects and can definitely say that it's battle-ready.
+
 # Golang bindings for TDLib (Telegram MTProto library)
 [![GoDoc](https://godoc.org/github.com/L11R/go-tdjson?status.svg)](https://godoc.org/github.com/L11R/go-tdjson)
 
